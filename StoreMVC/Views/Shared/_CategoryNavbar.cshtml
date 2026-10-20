@@ -1,0 +1,12 @@
+﻿@model IEnumerable<StoreMVC.Models.Category>
+
+<div class="navbar-nav w-100">
+    @if (Model != null)
+    {
+        foreach (var item in Model)
+        {
+            <!-- Đường link sẽ dẫn đến trang Store/Index cùng với categoryId để thực hiện bài tập lọc (Exercise) -->
+            <a href="@Url.Action("Index", "Store", new { categoryId = item.Id })" class="nav-item nav-link">@item.Name</a>
+        }
+    }
+</div>

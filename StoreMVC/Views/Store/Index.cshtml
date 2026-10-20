@@ -1,0 +1,83 @@
+﻿@model IEnumerable<StoreMVC.Models.Product>
+
+@{
+    ViewBag.Title = "Cửa Hàng";
+}
+
+<div class="container-fluid pt-5 pb-3">
+    <h2 class="section-title position-relative text-uppercase mx-xl-5 mb-4">
+        <span class="bg-secondary pr-3">Danh Sách Sản Phẩm</span>
+    </h2>
+
+    <div class="row px-xl-5">
+
+        <!-- PHẦN 1: VÒNG LẶP HIỂN THỊ SẢN PHẨM VÀ HÌNH ẢNH -->
+        @if (Model != null && Model.Any())
+        {
+            foreach (var item in Model)
+            {
+                <div class="col-lg-3 col-md-4 col-sm-6 pb-1">
+                    <div class="product-item bg-light mb-4">
+                        <div class="product-img position-relative overflow-hidden">
+                            <!-- Đường dẫn hình ảnh. Nếu ảnh không hiện, kiểm tra lại tên thư mục img hoặc img-product -->
+                            <img class="img-fluid w-100" src="~/Resources/img/@item.ImageUrl" alt="@item.Name">
+                            <div class="product-action">
+                                <a class="btn btn-outline-dark btn-square" href=""><i class="fa fa-shopping-cart"></i></a>
+                                <a class="btn btn-outline-dark btn-square" href=""><i class="far fa-heart"></i></a>
+                                <a class="btn btn-outline-dark btn-square" href=""><i class="fa fa-sync-alt"></i></a>
+                                <a class="btn btn-outline-dark btn-square" href=""><i class="fa fa-search"></i></a>
+                            </div>
+                        </div>
+                        <div class="text-center py-4">
+                            <!-- Link chuyển đến trang Chi tiết -->
+                            <a class="h6 text-decoration-none text-truncate" href="@Url.Action("Details", "Store", new { id = item.Id })">@item.Name</a>
+                            <div class="d-flex align-items-center justify-content-center mt-2">
+                                <h5>@item.Price.ToString("N0") VNĐ</h5><h6 class="text-muted ml-2"><del>@((item.Price * 1.2m).ToString("N0")) VNĐ</del></h6>
+                            </div>
+                            <div class="d-flex align-items-center justify-content-center mb-1">
+                                <small class="fa fa-star text-primary mr-1"></small>
+                                <small class="fa fa-star text-primary mr-1"></small>
+                                <small class="fa fa-star text-primary mr-1"></small>
+                                <small class="fa fa-star text-primary mr-1"></small>
+                                <small class="fa fa-star-half-alt text-primary mr-1"></small>
+                                <small>(99)</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        }
+        else
+        {
+            <div class="col-12"><p class="text-danger">Không tìm thấy sản phẩm nào.</p></div>
+        }
+
+        <!-- PHẦN 2: THANH PHÂN TRANG CỦA BẠN (Đã thêm categoryId để giữ bộ lọc khi chuyển trang) -->
+        <div class="col-12 mt-4">
+            @if (ViewBag.TotalPages > 1)
+            {
+                <nav>
+                    <ul class="pagination justify-content-center">
+                        <!-- Nút Previous -->
+                        <li class="page-item @(ViewBag.CurrentPage == 1 ? "disabled" : "")">
+                            <a class="page-link" href="@Url.Action("Index", new { page = ViewBag.CurrentPage - 1, categoryId = ViewBag.CurrentCategoryId })">Previous</a>
+                        </li>
+
+                        @for (int i = 1; i <= ViewBag.TotalPages; i++)
+                        {
+                            <li class="page-item @(i == ViewBag.CurrentPage ? "active" : "")">
+                                <a class="page-link" href="@Url.Action("Index", new { page = i, categoryId = ViewBag.CurrentCategoryId })">@i</a>
+                            </li>
+                        }
+
+                        <!-- Nút Next -->
+                        <li class="page-item @(ViewBag.CurrentPage == ViewBag.TotalPages ? "disabled" : "")">
+                            <a class="page-link" href="@Url.Action("Index", new { page = ViewBag.CurrentPage + 1, categoryId = ViewBag.CurrentCategoryId })">Next</a>
+                        </li>
+                    </ul>
+                </nav>
+            }
+        </div>
+
+    </div>
+</div>
